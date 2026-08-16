@@ -1,0 +1,17 @@
+{
+  "name": "tetris",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "test:mutation": "node test/mutate.mjs",
+    "test:browser": "node test/post-clear.mjs && node test/stack-colors.mjs && node test/lock-delay.mjs && node test/piece-position.mjs && node test/hidden-rows.mjs && node test/harddrop-trail.mjs && node test/mirror-floor.mjs && node test/lock-impact.mjs && node test/ghost-holo.mjs && node test/crystal-ibl.mjs && node test/cinematic-grade.mjs && node test/popup-banner.mjs && node test/gameover-cinematic.mjs && node test/level-palette.mjs && node test/row-collapse.mjs && node test/holo-queue.mjs && node test/light-sweep.mjs && node test/ambient-dust.mjs && node test/rafter-spots.mjs && node test/streak-mode.mjs && node test/sky-meteors.mjs && node test/anamorphic-flare.mjs && node test/perfect-clear.mjs && node test/rotation-echo.mjs && node test/fall-dust.mjs && node test/danger-alarm.mjs",
+    "start": "python3 -m http.server 8901"
+  },
+  "dependencies": {
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}

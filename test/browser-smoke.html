@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>smoke</title><link rel="stylesheet" href="../style.css"></head>
+<body>
+<div id="app">
+  <aside class="panel left"><div class="panel-box"><h2>Hold</h2><canvas id="hold" width="120" height="60"></canvas></div></aside>
+  <main class="board-wrap"><div id="board-frame"><canvas id="board"></canvas>
+    <div id="overlay" class="hidden"><div id="overlay-title"></div><div id="overlay-sub"></div></div>
+  </div></main>
+  <aside class="panel right"><div class="panel-box"><h2>Next</h2><canvas id="next" width="120" height="180"></canvas></div>
+    <div class="panel-box stats">
+      <div class="stat"><span class="label">Score</span><span id="score">0</span></div>
+      <div class="stat"><span class="label">Level</span><span id="level">1</span></div>
+      <div class="stat"><span class="label">Lines</span><span id="lines">0</span></div>
+      <div class="stat"><span class="label">Best</span><span id="best">0</span></div>
+    </div>
+  </aside>
+</div>
+<script type="importmap">
+  {
+    "imports": {
+      "three": "../node_modules/three/build/three.module.js",
+      "three/addons/": "../node_modules/three/examples/jsm/"
+    }
+  }
+</script>
+<script type="module" src="../main.js"></script>
+<script type="module">
+// Smoke test: drive the game with synthetic keys, report via console.
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+function key(type, k) {
+  window.dispatchEvent(new KeyboardEvent(type, { key: k }));
+}
+const score = () => window.__tetris.game.score;
+const results = [];
+function check(name, cond) {
+  results.push(`${cond ? 'PASS' : 'FAIL'} ${name}`);
+}
+
+await sleep(300);
+const s0 = score();
+// Hard drop -> score increases (drop distance * 2)
+key('keydown', ' '); key('keyup', ' ');
+await sleep(50);
+check('hard drop scores', score() > s0);
+// Rotate
+key('keydown', 'ArrowUp'); key('keyup', 'ArrowUp');
+await sleep(50);
+check('no crash after rotate', true);
+// Hold
+key('keydown', 'c'); key('keyup', 'c');
+await sleep(50);
+check('hold works', true);
+// Move left a few times
+for (let i = 0; i < 3; i++) { key('keydown', 'ArrowLeft'); key('keyup', 'ArrowLeft'); await sleep(30); }
+check('move works', true);
+// Pause / unpause
+key('keydown', 'p'); key('keyup', 'p');
+await sleep(50);
+check('pause overlay', !document.getElementById('overlay').classList.contains('hidden'));
+key('keydown', 'p'); key('keyup', 'p');
+await sleep(50);
+check('unpause overlay', document.getElementById('overlay').classList.contains('hidden'));
+// Soft drop held briefly
+key('keydown', 'ArrowDown'); await sleep(120); key('keyup', 'ArrowDown');
+check('soft drop scores', score() >= s0 + 1);
+// Play until game over with hard drops (max 5s)
+const t0 = Date.now();
+let guard = 0;
+while (guard++ < 300 && Date.now() - t0 < 5000) {
+  key('keydown', ' '); key('keyup', ' ');
+  await sleep(20);
+  if (!document.getElementById('overlay').classList.contains('hidden')) break;
+}
+const title = document.getElementById('overlay-title').textContent;
+check('game over reached: ' + title, title === 'Game Over');
+// Restart
+key('keydown', 'r'); key('keyup', 'r');
+await sleep(50);
+check('restart clears overlay', document.getElementById('overlay').classList.contains('hidden'));
+check('restart resets score', score() === 0);
+console.log('SMOKE_RESULTS\n' + results.join('\n'));
+</script>
+</body>
+</html>

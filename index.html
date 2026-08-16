@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tetris 3D</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <aside class="panel left">
+    <div class="panel-box">
+      <h2>Hold</h2>
+      <canvas id="hold" width="120" height="60"></canvas>
+    </div>
+    <div class="panel-box">
+      <h2>Controls</h2>
+      <ul class="keys">
+        <li><kbd>←</kbd><kbd>→</kbd> move</li>
+        <li><kbd>↓</kbd> soft drop</li>
+        <li><kbd>↑</kbd>/<kbd>X</kbd> rotate ↻</li>
+        <li><kbd>Z</kbd> rotate ↺</li>
+        <li><kbd>Space</kbd> hard drop</li>
+        <li><kbd>C</kbd> hold</li>
+        <li><kbd>P</kbd> pause</li>
+        <li><kbd>R</kbd> restart</li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="board-wrap">
+    <div id="board-frame">
+      <canvas id="board"></canvas>
+      <div id="overlay" class="hidden">
+        <div id="overlay-title"></div>
+        <div id="overlay-sub"></div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="panel right">
+    <div class="panel-box">
+      <h2>Next</h2>
+      <canvas id="next" width="120" height="180"></canvas>
+    </div>
+    <div class="panel-box stats">
+      <div class="stat"><span class="label">Score</span><span id="score">0</span></div>
+      <div class="stat"><span class="label">Level</span><span id="level">1</span></div>
+      <div class="stat"><span class="label">Lines</span><span id="lines">0</span></div>
+      <div class="stat"><span class="label">Best</span><span id="best">0</span></div>
+    </div>
+  </aside>
+</div>
+<script type="importmap">
+  {
+    "imports": {
+      "three": "./node_modules/three/build/three.module.js",
+      "three/addons/": "./node_modules/three/examples/jsm/"
+    }
+  }
+</script>
+<script type="module" src="main.js"></script>
+</body>
+</html>
